@@ -58,7 +58,18 @@ async def judge_rhyme(request_body: rhyme_schema.RhymeInput):
     vowelsTitle = removeConsonants(romajiTitle)
     vowelsInput = removeConsonants(romajiInput)
 
-
-    print(vowelsTitle)
     print(vowelsInput)
-    return rhyme_schema.RhymeScore(score=8, title=request_body.title, input=request_body.input)
+    print(vowelsTitle)
+
+    n = max(len(vowelsInput), len(vowelsTitle))
+    score = 0
+    for i in range(n):
+        if vowelsTitle[0] == vowelsInput[i]:
+            for l in range(n - i):
+                if vowelsTitle[l] == vowelsInput[i + l]:
+                    score += 1
+                else:
+                    return rhyme_schema.RhymeScore(score=score, title=request_body.title, input=request_body.input)
+        else:
+            continue
+    return rhyme_schema.RhymeScore(score=score, title=request_body.title, input=request_body.input)
